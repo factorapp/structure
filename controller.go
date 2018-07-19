@@ -23,11 +23,17 @@ type BasicController struct {
 
 // Targets is a map of struct fields to references to data targets
 func (c *BasicController) Targets() map[string]Ref {
+	if c.targets == nil {
+		c.targets = make(map[string]Ref)
+	}
 	return c.targets
 }
 
 // Sources is a map of references to data sources to struct fields
 func (c *BasicController) Sources() map[Ref]string {
+	if c.sources == nil {
+		c.sources = make(map[Ref]string)
+	}
 	return c.sources
 }
 
