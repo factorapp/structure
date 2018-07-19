@@ -10,27 +10,33 @@ import (
 type Element struct {
 	js.Value
 }
+
 type Controller interface {
-	Targets() map[string]string
+	Targets() map[string]Ref
+	Sources() map[Ref]string
 }
 
-type DOMObjectController struct {
-	targets map[string]string
+type BasicController struct {
+	targets map[string]Ref
+	sources map[Ref]string
 }
 
-func (d *DOMObjectController) Targets() map[string]string {
-	return d.targets
+// Targets is a map of struct fields to references to data targets
+func (c *BasicController) Targets() map[string]Ref {
+	return c.targets
 }
 
-type ObjectController struct {
-	targets map[string]string
+// Sources is a map of references to data sources to struct fields
+func (c *BasicController) Sources() map[Ref]string {
+	return c.sources
 }
 
 func RegisterController(c Controller) error {
 	t := reflect.TypeOf(c).Elem()
-
+	fmt.Println("hello")
 	// Iterate over all available fields and read the tag value
 	for i := 0; i < t.NumField(); i++ {
+		fmt.Println("field", i)
 		// Get the field, returns https://golang.org/pkg/reflect/#StructField
 		field := t.Field(i)
 
@@ -38,7 +44,14 @@ func RegisterController(c Controller) error {
 		tag := field.Tag.Get("source")
 
 		if tag != "" {
-			c.Targets()["source"] = tag
+			fmt.Println("adding source", tag)
+			c.Targets()["source"] = NewStringRef(tag)
+		}
+
+		tag = field.Tag.Get("target")
+		if tag != "" {
+			fmt.Println("adding target", tag)
+			c.Targets()["target"] = NewStringRef(tag)
 		}
 	}
 	fmt.Println(c.Targets())

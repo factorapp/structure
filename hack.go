@@ -1,10 +1,10 @@
 package structure
 
 type HelloController struct {
-	DOMObjectController
+	Controller
 	Name string `source:"input#first-name"`
 }
 type Hello2Controller struct {
-	DOMObjectController
+	Controller
 	Name string `target:"input#first-name"`
 }

@@ -3,18 +3,9 @@ package structure
 type Reconciler interface {
 	Reconcile(c Controller)
 }
-type DOMReconciler struct {
-	sources map[string]Element
-	target  map[string]Element
-}
 
-func (d *DOMReconciler) Reconcile(c Controller) {
+type BasicReconciler struct{}
 
-}
-
-type RPCReconciler struct {
-}
-
-func (r *RPCReconciler) Reconcile(c Controller) {
+func (b BasicReconciler) Reconcile(c Controller) {
 
 }
