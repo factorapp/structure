@@ -3,7 +3,7 @@ package main
 import "github.com/factorapp/structure"
 
 type HelloController struct {
-	DOMObjectController
+	structure.DOMObjectController
 	Name string `source:"input#first-name"`
 }
 
