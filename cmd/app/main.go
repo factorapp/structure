@@ -1,6 +1,8 @@
 package main
 
-import "github.com/factorapp/structure"
+import (
+	"github.com/factorapp/structure"
+)
 
 type HelloController struct {
 	structure.BasicController
@@ -12,7 +14,6 @@ type HelloController struct {
 // }
 
 func main() {
-	structure.RegisterController(&HelloController{})
-
-	structure.RegisterController(NewHTMLAJAXController("div#myhtml", "/mystuff..."))
+	structure.RegisterController("hello", &HelloController{})
+	structure.Run()
 }
