@@ -8,10 +8,10 @@ import (
 
 func wasmHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/wasm")
-	http.ServeFile(w, r, "./app/example.wasm")
+	http.ServeFile(w, r, "./app/app.wasm")
 }
 func main() {
-	http.HandleFunc("/app/example.wasm", wasmHandler)
+	http.HandleFunc("/app/app.wasm", wasmHandler)
 	/*	cwd, err := os.Getcwd()
 		if err != nil {
 			panic(err)
