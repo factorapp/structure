@@ -11,19 +11,19 @@ type Element struct {
 	js.Value
 }
 type Controller interface {
-	Targets() map[string]Element
+	Targets() map[string]string
 }
 
 type DOMObjectController struct {
-	targets map[string]Element
+	targets map[string]string
 }
 
-func (d *DOMObjectController) Targets() map[string]Element {
+func (d *DOMObjectController) Targets() map[string]string {
 	return d.targets
 }
 
 type ObjectController struct {
-	targets map[string]Element
+	targets map[string]string
 }
 
 func RegisterController(c Controller) error {
@@ -38,8 +38,9 @@ func RegisterController(c Controller) error {
 		tag := field.Tag.Get("source")
 
 		if tag != "" {
-			fmt.Println(tag)
+			c.Targets()["source"] = tag
 		}
 	}
+	fmt.Println(c.Targets())
 	return nil
 }
