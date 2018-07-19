@@ -1,6 +1,6 @@
 .PHONY: wasm
 wasm: 
-	GOROOT=~/gowasm GOARCH=wasm GOOS=js ~/gowasm/bin/go build -o example.wasm ./client
+	GOROOT=~/gowasm GOARCH=wasm GOOS=js ~/gowasm/bin/go build -o app.wasm .
 
 .PHONY: server-app
 server-app:
