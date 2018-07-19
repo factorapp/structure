@@ -3,9 +3,12 @@ package structure
 
 import (
 	"fmt"
+	"github.com/dennwc/dom"
 	"reflect"
 	"syscall/js"
 )
+
+var controllerRegistry = map[string]Controller{}
 
 type Element struct {
 	js.Value
@@ -37,12 +40,10 @@ func (c *BasicController) Sources() map[Ref]string {
 	return c.sources
 }
 
-func RegisterController(c Controller) error {
+func RegisterController(name string, c Controller) error {
 	t := reflect.TypeOf(c).Elem()
-	fmt.Println("hello")
 	// Iterate over all available fields and read the tag value
 	for i := 0; i < t.NumField(); i++ {
-		fmt.Println("field", i)
 		// Get the field, returns https://golang.org/pkg/reflect/#StructField
 		field := t.Field(i)
 
@@ -50,16 +51,34 @@ func RegisterController(c Controller) error {
 		tag := field.Tag.Get("source")
 
 		if tag != "" {
-			fmt.Println("adding source", tag)
 			c.Targets()["source"] = NewStringRef(tag)
 		}
 
 		tag = field.Tag.Get("target")
 		if tag != "" {
-			fmt.Println("adding target", tag)
 			c.Targets()["target"] = NewStringRef(tag)
 		}
 	}
 	fmt.Println(c.Targets())
+	controllerRegistry[name] = c
 	return nil
+}
+func Run() error {
+	// ch := make(chan struct{})
+	createComponents()
+	// <-ch
+	return nil
+}
+
+func createComponents() {
+
+	for name, _ := range controllerRegistry {
+		elements := dom.Doc.QuerySelectorAll("[data-controller='" + name + "']")
+		//	els := js.Global.Get("document").Call("querySelector", "[data-controller='"+name+"']")
+		fmt.Println(elements)
+		for _, el := range elements {
+			fmt.Println(el)
+		}
+	}
+
 }
