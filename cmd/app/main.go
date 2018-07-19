@@ -14,5 +14,5 @@ type HelloController struct {
 func main() {
 	structure.RegisterController(&HelloController{})
 
-	structure.RegisterController(NewHTMLAJAXController("div#myhtml", "/mystuff..."))
+	//structure.RegisterController(NewHTMLAJAXController("div#myhtml", "/mystuff..."))
 }
