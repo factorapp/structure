@@ -1,2 +1,3 @@
 app.wasm 
 .envrc
+.DS_Store
