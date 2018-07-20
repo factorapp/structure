@@ -1,12 +1,12 @@
 // build +js,wasm
-package structure
+package core
 
 import (
 	"fmt"
-	"syscall/js"
-	"strings"
-	"reflect"
 	dom "github.com/gowasm/go-js-dom"
+	"reflect"
+	"strings"
+	"syscall/js"
 )
 
 var controllerRegistry = map[string]Controller{}
@@ -24,7 +24,7 @@ type BasicController struct {
 }
 
 // Targets is a map of struct fields to references to data targets
-func (c *BasicController) Targets() map[string][]dom.Element{
+func (c *BasicController) Targets() map[string][]dom.Element {
 	if c.targets == nil {
 		c.targets = make(map[string][]dom.Element)
 	}
@@ -68,7 +68,7 @@ func mapTargets(element dom.Element, controller Controller) {
 func mapActions(element dom.Element, controller Controller) {
 	els := element.QuerySelectorAll("[data-action]")
 	for _, el := range els {
-		action:= el.GetAttribute("data-action")
+		action := el.GetAttribute("data-action")
 		var actionName string
 		actionNames := strings.Split(action, "#")
 		if len(actionNames) > 1 {
@@ -89,18 +89,18 @@ func mapActions(element dom.Element, controller Controller) {
 		// make an `eventName` callback for controller pointing to `action`
 
 		/*
-         cb = js.NewCallback(func(args []js.Value) {
-                  move := js.Global.Get("document").Call("getElementById", "myText").Get("value").Int()
-                  fmt.Println(move)
-          })
-          js.Global.Get("document").Call("getElementById", "myText").Call("addEventListener", "input", cb)
+		   cb = js.NewCallback(func(args []js.Value) {
+		            move := js.Global.Get("document").Call("getElementById", "myText").Get("value").Int()
+		            fmt.Println(move)
+		    })
+		    js.Global.Get("document").Call("getElementById", "myText").Call("addEventListener", "input", cb)
 		*/
-	cb := js.NewCallback(func(args []js.Value) {
-		fmt.Println("EVENT!")
-      	reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(nil)
-		 })
-			  el.Underlying().Call("addEventListener", eventName, cb)
-		}
+		cb := js.NewCallback(func(args []js.Value) {
+			fmt.Println("EVENT!")
+			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(nil)
+		})
+		el.Underlying().Call("addEventListener", eventName, cb)
+	}
 	// Iterate over all available fields and read the tag value
 }
 func createComponents(reconciler Reconciler) {

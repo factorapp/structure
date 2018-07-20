@@ -1,7 +1,6 @@
-package structure
+package core
 
 import (
-
 	dom "github.com/gowasm/go-js-dom"
 	// "github.com/dennwc/dom/js"
 )

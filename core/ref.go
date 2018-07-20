@@ -1,4 +1,4 @@
-package structure
+package core
 
 type Ref interface {
 	Name() string

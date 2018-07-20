@@ -4,11 +4,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/factorapp/structure"
+	"github.com/factorapp/structure/core"
 )
 
 type SlideshowController struct {
-	structure.BasicController
+	core.BasicController
 	Index int
 }
 
@@ -56,6 +56,6 @@ func (s *SlideshowController) Previous() {
 // }
 
 func main() {
-	structure.RegisterController("slideshow", &SlideshowController{Index: 1})
-	structure.Run()
+	core.RegisterController("slideshow", &SlideshowController{Index: 1})
+	core.Run()
 }
