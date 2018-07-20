@@ -11,6 +11,7 @@ import (
 
 type Reconciler interface {
 	Reconcile(c Controller) error
+	Register(el dom.Element, c Controller)
 }
 
 // refEltTuple is an (element, ref) pair that's used either as a source or target
@@ -23,21 +24,21 @@ type refEltTuple struct {
 type BasicReconciler struct {
 	// sources is a set of (element, ref) tuples that the reconciler should use to set the ref
 	// value in each tuple into the value of its corresponding element on each reconcile
-	sources []valEltTuple
+	sources []refEltTuple
 	// targets is a set of (element, ref) tuples that the reconciler should use to set
 	// the element value in each tuple to its corresponding ref value on each reconcile
-	targets []valEltTuple
+	targets []refEltTuple
 }
 
 func (b BasicReconciler) Reconcile(c Controller) error {
 	// ref => element
 	for _, source := range b.sources {
-		element.SetInnerHTML(source.ref.Value())
+		source.el.Set("innerHTML", source.ref.Value())
 	}
 
 	// element => ref
 	for _, target := range b.targets {
-		if err := source.ref.Set(target.el.InnerHTML()); err != nil {
+		if err := target.ref.Set(target.el.Get("innerHTML")); err != nil {
 			return err
 		}
 	}

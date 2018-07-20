@@ -77,7 +77,7 @@ func Run() error {
 	return nil
 }
 
-func createComponents(reconciler *Reconciler) {
+func createComponents(reconciler Reconciler) {
 	for name, controller := range controllerRegistry {
 		elements := dom.GetWindow().Document().QuerySelectorAll("[data-controller='" + name + "']")
 		for _, el := range elements {

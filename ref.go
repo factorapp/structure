@@ -39,8 +39,8 @@ func newStructFieldRef(
 	return &structFieldRef{name: fieldName, get: get, set: set}
 }
 
-type (s structFieldRef) Name() string { return s.name}
-func (s structFieldRef) Value() interface{} { return s.get()}
+func (s structFieldRef) Name() string       { return s.name }
+func (s structFieldRef) Value() interface{} { return s.get() }
 func (s structFieldRef) Set(iface interface{}) error {
 	return s.set(iface)
 }
