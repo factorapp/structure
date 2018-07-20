@@ -24,7 +24,6 @@ func (b BasicReconciler) Register(element dom.Element, controller Controller) {
 	for i, el := range els {
 		log.Println(
 			"element", i,
-			"file", "sloth.png",
 			"tag", el.TagName(),
 		)
 		target := el.GetAttribute("data-target")
