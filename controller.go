@@ -71,13 +71,15 @@ func Run() error {
 }
 
 func createComponents() {
-
-	for name, _ := range controllerRegistry {
+	reconciler := &BasicReconciler{}
+	for name, controller := range controllerRegistry {
 		elements := dom.Doc.QuerySelectorAll("[data-controller='" + name + "']")
 		//	els := js.Global.Get("document").Call("querySelector", "[data-controller='"+name+"']")
 		fmt.Println(elements)
 		for _, el := range elements {
 			fmt.Println(el)
+			fmt.Println("node", el.NodeName())
+			reconciler.Register(el, controller)
 		}
 	}
 
