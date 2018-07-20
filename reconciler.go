@@ -69,6 +69,9 @@ func (b BasicReconciler) Register(element dom.Element, controller Controller) {
 		// now we know the controller,
 		// we have the element,
 		// and we know the name of the field in the controller we're mapping to
+		fn := strings.Title(fieldName)
+		target, ok := controller.Targets()[fn]
+		fmt.Println("match:", fn, target, ok)
 		
 	}
 }
