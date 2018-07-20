@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/factorapp/structure"
 )
 
@@ -12,7 +13,7 @@ type SlideshowController struct {
 }
 
 func (s *SlideshowController) currentSlide() int {
-	return s.Index+1
+	return s.Index + 1
 }
 
 func (s *SlideshowController) showSlide() {
@@ -29,7 +30,7 @@ func (s *SlideshowController) showSlide() {
 func (s *SlideshowController) Next() {
 	tlen := len(s.Targets()["slide"])
 	if s.Index >= tlen {
-		s.Index= 0
+		s.Index = 0
 	}
 	s.Index++
 	fmt.Println("INDEX:", s.Index)
@@ -40,7 +41,7 @@ func (s *SlideshowController) Previous() {
 
 	s.Index--
 
-	if s.Index <= 0{
+	if s.Index <= 0 {
 		s.Index = len(s.Targets()["slide"])
 		fmt.Println("INDEX:", s.Index)
 		return
@@ -49,11 +50,12 @@ func (s *SlideshowController) Previous() {
 
 	s.showSlide()
 }
+
 // type OtherThingController struct {
 // 	structure.
 // }
 
 func main() {
-	structure.RegisterController("slideshow", &SlideshowController{})
+	structure.RegisterController("slideshow", &SlideshowController{Index: 1})
 	structure.Run()
 }
