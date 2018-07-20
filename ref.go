@@ -24,3 +24,23 @@ func (s *StringRef) Set(iface interface{}) error {
 func (s StringRef) Value() interface{} {
 	return s.str
 }
+
+type structFieldRef struct {
+	name string
+	get  func() interface{}
+	set  func(interface{}) error
+}
+
+func newStructFieldRef(
+	fieldName string,
+	get func() interface{},
+	set func(interface{}) error,
+) Ref {
+	return &structFieldRef{name: fieldName, get: get, set: set}
+}
+
+type (s structFieldRef) Name() string { return s.name}
+func (s structFieldRef) Value() interface{} { return s.get()}
+func (s structFieldRef) Set(iface interface{}) error {
+	return s.set(iface)
+}
