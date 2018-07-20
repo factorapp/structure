@@ -52,13 +52,14 @@ func RegisterController(name string, c Controller) error {
 		tag := field.Tag.Get("source")
 
 		if tag != "" {
-			fmt.Println("TAG:", tag)
+			fmt.Println("Source TAG:", tag)
 			c.Sources()[NewStringRef(tag)] = tag
 		}
 
-		tag = field.Tag.Get("target")
-		if tag != "" {
-			c.Targets()[tag] = NewStringRef(tag)
+		ttag := field.Tag.Get("target")
+		if ttag != "" {
+		fmt.Println("Target TAG:", ttag)
+			c.Targets()[ttag] = NewStringRef(ttag)
 		}
 	}
 	fmt.Println("Targets:", c.Targets())
@@ -77,13 +78,6 @@ func createComponents() {
 	reconciler := &BasicReconciler{}
 	for name, controller := range controllerRegistry {
 		elements := dom.GetWindow().Document().QuerySelectorAll("[data-controller='" + name + "']")
-		els := js.Global().Get("document").Call("querySelector", "[data-controller='"+name+"']")
-		fmt.Println("els:", els)
-		fmt.Println(els.Get("nodeName"))
-		fmt.Println(els.Get("nodeType"))
-		fmt.Println(els.Get("nodeValue"))
-		fmt.Println(els.Call("getAttribute", "data-controller"))
-		fmt.Println(elements)
 		for _, el := range elements {
 			fmt.Println(el)
 			fmt.Println("node", el.NodeName())
