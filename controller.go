@@ -2,10 +2,9 @@
 package structure
 
 import (
-	"reflect"
+	"fmt"
 	"syscall/js"
-
-	"log"
+	"strings"
 
 	dom "github.com/gowasm/go-js-dom"
 )
@@ -17,54 +16,22 @@ type Element struct {
 }
 
 type Controller interface {
-	Targets() map[string]Ref
-	Sources() map[Ref]string
+	Targets() map[string][]dom.Element
 }
 
 type BasicController struct {
-	targets map[string]Ref
-	sources map[Ref]string
+	targets map[string][]dom.Element
 }
 
 // Targets is a map of struct fields to references to data targets
-func (c *BasicController) Targets() map[string]Ref {
+func (c *BasicController) Targets() map[string][]dom.Element{
 	if c.targets == nil {
-		c.targets = make(map[string]Ref)
+		c.targets = make(map[string][]dom.Element)
 	}
 	return c.targets
 }
 
-// Sources is a map of references to data sources to struct fields
-func (c *BasicController) Sources() map[Ref]string {
-	if c.sources == nil {
-		c.sources = make(map[Ref]string)
-	}
-	return c.sources
-}
-
 func RegisterController(name string, c Controller) error {
-	t := reflect.TypeOf(c).Elem()
-	// Iterate over all available fields and read the tag value
-	for i := 0; i < t.NumField(); i++ {
-		// Get the field, returns https://golang.org/pkg/reflect/#StructField
-		field := t.Field(i)
-
-		// Get the field tag value
-		tag := field.Tag.Get("source")
-
-		if tag != "" {
-			log.Println("Source TAG:", tag)
-			c.Sources()[NewStringRef(tag)] = tag
-		}
-
-		ttag := field.Tag.Get("target")
-		if ttag != "" {
-			log.Println("Target TAG:", ttag)
-			c.Targets()[ttag] = NewStringRef(ttag)
-		}
-	}
-	log.Println("Targets:", c.Targets())
-	log.Println("Sources:", c.Sources())
 	controllerRegistry[name] = c
 	return nil
 }
@@ -77,12 +44,32 @@ func Run() error {
 	return nil
 }
 
+// mapTargets gets children of `element` with the `data-target`
+// attribute and registers them in the targets map of the
+// controller
+func mapTargets(element dom.Element, controller Controller) {
+	els := element.QuerySelectorAll("[data-target]")
+	for _, el := range els {
+		target := el.GetAttribute("data-target")
+		var targetName string
+		targetNames := strings.Split(target, ".")
+		if len(targetNames) > 1 {
+			targetName = targetNames[1]
+		} else {
+			// todo: handle more gracefully?
+			fmt.Println("Bad Target:", target)
+			continue
+		}
+		controller.Targets()[targetName] = append(controller.Targets()[targetName], element)
+	}
+
+}
 func createComponents(reconciler Reconciler) {
 	for name, controller := range controllerRegistry {
 		elements := dom.GetWindow().Document().QuerySelectorAll("[data-controller='" + name + "']")
 		for _, el := range elements {
-			log.Println("node", el.NodeName(), "found data-controller element")
 			reconciler.Register(el, controller)
+			mapTargets(el, controller)
 		}
 	}
 

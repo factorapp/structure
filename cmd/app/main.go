@@ -5,17 +5,23 @@ import (
 	"github.com/factorapp/structure"
 )
 
-type HelloController struct {
+type SlideshowController struct {
 	structure.BasicController
-	Name   string `source:"Name"`
-	Output string `target:"Output"`
+	Index int
 }
 
+func (s *SlideshowController) Next() {
+	s.Index++
+}
+
+func (s *SlideshowController) Previous() {
+	s.Index--
+}
 // type OtherThingController struct {
 // 	structure.
 // }
 
 func main() {
-	structure.RegisterController("hello", &HelloController{})
+	structure.RegisterController("slideshow", &SlideshowController{})
 	structure.Run()
 }

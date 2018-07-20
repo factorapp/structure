@@ -13,11 +13,26 @@
 
 <body>
 	<div id="main">
-		<div data-controller="hello">
-			<input data-target="hello.name" type="text"/>
-			<button data-action="click->hello#greet">Greet</button>
-			<span data-target="hello.output"></span>
-		</div>
+        <style>
+.slide {
+  display: none;
+}
+
+.slide.slide--current {
+  display: block;
+}
+
+        </style>
+<div data-controller="slideshow">
+  <button data-action="slideshow#previous">←</button>
+  <button data-action="slideshow#next">→</button>
+
+  <div data-target="slideshow.slide" class="slide">🐵</div>
+  <div data-target="slideshow.slide" class="slide">🙈</div>
+  <div data-target="slideshow.slide" class="slide">🙉</div>
+  <div data-target="slideshow.slide" class="slide">🙊</div>
+</div>
+
 	</div>
 	<div id="target"></div>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>

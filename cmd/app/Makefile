@@ -8,7 +8,7 @@ wasm:
 
 .PHONY: server-app
 server-app:
-	~/gowasm/bin/go build -o server-app ./server
+	GOOS=darwin GOARCH=amd64 ~/gowasm/bin/go build -o server-app ./server
 
 .PHONY: run
 run: generate wasm server-app
