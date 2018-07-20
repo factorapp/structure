@@ -2,10 +2,11 @@
 package structure
 
 import (
+	"log"
 	"fmt"
 	"syscall/js"
 	"strings"
-
+	"reflect"
 	dom "github.com/gowasm/go-js-dom"
 )
 
@@ -38,9 +39,9 @@ func RegisterController(name string, c Controller) error {
 
 func Run() error {
 	reconciler := &BasicReconciler{}
-	// ch := make(chan struct{})
+	ch := make(chan struct{})
 	createComponents(reconciler)
-	// <-ch
+	<-ch
 	return nil
 }
 
@@ -64,12 +65,53 @@ func mapTargets(element dom.Element, controller Controller) {
 	}
 
 }
+
+func mapActions(element dom.Element, controller Controller) {
+	els := element.QuerySelectorAll("[data-action]")
+	for _, el := range els {
+		action:= el.GetAttribute("data-action")
+		var actionName string
+		actionNames := strings.Split(action, "#")
+		if len(actionNames) > 1 {
+			actionName = actionNames[1]
+		} else {
+			// todo: handle more gracefully?
+			fmt.Println("Bad Action:", action)
+			continue
+		}
+		var eventName string
+		eventNames := strings.Split(actionNames[0], ">")
+		if len(eventNames) > 1 {
+			eventName = eventNames[1]
+		} else {
+			eventName = "click"
+		}
+
+		// make an `eventName` callback for controller pointing to `action`
+		log.Println("Event", eventName, "Action", actionName)
+
+		/*
+         cb = js.NewCallback(func(args []js.Value) {
+                  move := js.Global.Get("document").Call("getElementById", "myText").Get("value").Int()
+                  fmt.Println(move)
+          })
+          js.Global.Get("document").Call("getElementById", "myText").Call("addEventListener", "input", cb)
+		*/
+	cb := js.NewCallback(func(args []js.Value) {
+		fmt.Println("EVENT!")
+      	reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(nil)
+		 })
+          el.Underlying().Call("addEventListener", eventName, cb)
+		}
+	// Iterate over all available fields and read the tag value
+}
 func createComponents(reconciler Reconciler) {
 	for name, controller := range controllerRegistry {
 		elements := dom.GetWindow().Document().QuerySelectorAll("[data-controller='" + name + "']")
 		for _, el := range elements {
 			reconciler.Register(el, controller)
 			mapTargets(el, controller)
+			mapActions(el, controller)
 		}
 	}
 
