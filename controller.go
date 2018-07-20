@@ -2,7 +2,6 @@
 package structure
 
 import (
-	"log"
 	"fmt"
 	"syscall/js"
 	"strings"
@@ -61,7 +60,7 @@ func mapTargets(element dom.Element, controller Controller) {
 			fmt.Println("Bad Target:", target)
 			continue
 		}
-		controller.Targets()[targetName] = append(controller.Targets()[targetName], element)
+		controller.Targets()[targetName] = append(controller.Targets()[targetName], el)
 	}
 
 }
@@ -88,7 +87,6 @@ func mapActions(element dom.Element, controller Controller) {
 		}
 
 		// make an `eventName` callback for controller pointing to `action`
-		log.Println("Event", eventName, "Action", actionName)
 
 		/*
          cb = js.NewCallback(func(args []js.Value) {
@@ -101,7 +99,7 @@ func mapActions(element dom.Element, controller Controller) {
 		fmt.Println("EVENT!")
       	reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(nil)
 		 })
-          el.Underlying().Call("addEventListener", eventName, cb)
+			  el.Underlying().Call("addEventListener", eventName, cb)
 		}
 	// Iterate over all available fields and read the tag value
 }

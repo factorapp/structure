@@ -14,6 +14,18 @@ type SlideshowController struct {
 func (s *SlideshowController) currentSlide() int {
 	return s.Index+1
 }
+
+func (s *SlideshowController) showSlide() {
+	for i, el := range s.Targets()["slide"] {
+		fmt.Println(el.TagName())
+		if i == s.Index-1 {
+			el.Class().SetString("slide.slide-current")
+		} else {
+			el.Class().SetString("slide")
+		}
+	}
+
+}
 func (s *SlideshowController) Next() {
 	tlen := len(s.Targets()["slide"])
 	if s.Index >= tlen {
@@ -21,18 +33,21 @@ func (s *SlideshowController) Next() {
 	}
 	s.Index++
 	fmt.Println("INDEX:", s.Index)
+	s.showSlide()
 }
 
 func (s *SlideshowController) Previous() {
 
 	s.Index--
 
-	if r.Index <= 0{
-		s.Index = len(s.Targets()["slide"]) 
+	if s.Index <= 0{
+		s.Index = len(s.Targets()["slide"])
 		fmt.Println("INDEX:", s.Index)
 		return
 	}
 	fmt.Println("INDEX:", s.Index)
+
+	s.showSlide()
 }
 // type OtherThingController struct {
 // 	structure.
