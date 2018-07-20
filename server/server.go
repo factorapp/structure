@@ -23,5 +23,5 @@ func NewServer(templates packr.Box) http.Handler {
 	handler.HandleFunc
 	src := http.Server{}
 	// TODO: this thing needs to serve the wasm app, the wasm.js
-	return &Server{}
+	return &Server{hdl: app}
 }
