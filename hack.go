@@ -2,10 +2,8 @@ package structure
 
 import (
 	"fmt"
+	"log"
 	"syscall/js"
-
-	"github.com/apex/log"
-	"github.com/apex/log/handlers/text"
 )
 
 type HelloController struct {
@@ -33,6 +31,5 @@ func init() {
 	fmt.Println("Setting logger!")
 	d = js.Global().Get("document")
 	div := d.Call("getElementById", "target")
-	log.SetHandler(text.New(DivWriter(div)))
-	log.SetLevel(log.DebugLevel)
+	log.SetOutput(DivWriter(div))
 }
