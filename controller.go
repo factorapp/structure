@@ -68,16 +68,16 @@ func RegisterController(name string, c Controller) error {
 	controllerRegistry[name] = c
 	return nil
 }
+
 func Run() error {
+	reconciler := &BasicReconciler{}
 	// ch := make(chan struct{})
-	createComponents()
+	createComponents(reconciler)
 	// <-ch
 	return nil
 }
 
-func createComponents() {
-
-	reconciler := &BasicReconciler{}
+func createComponents(reconciler *Reconciler) {
 	for name, controller := range controllerRegistry {
 		elements := dom.GetWindow().Document().QuerySelectorAll("[data-controller='" + name + "']")
 		for _, el := range elements {
