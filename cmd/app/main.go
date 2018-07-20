@@ -1,3 +1,4 @@
+//go:generate bash -c "cp $DOLLAR(go env GOROOT)/misc/wasm/wasm_exec.js ./app/wasm_exec.js"
 package main
 
 import (
@@ -6,7 +7,7 @@ import (
 
 type HelloController struct {
 	structure.BasicController
-	Name string `source:"Name"`
+	Name   string `source:"Name"`
 	Output string `target:"Output"`
 }
 
