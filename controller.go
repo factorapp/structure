@@ -52,15 +52,17 @@ func RegisterController(name string, c Controller) error {
 		tag := field.Tag.Get("source")
 
 		if tag != "" {
-			c.Targets()["source"] = NewStringRef(tag)
+			fmt.Println("TAG:", tag)
+			c.Sources()[NewStringRef(tag)] = tag
 		}
 
 		tag = field.Tag.Get("target")
 		if tag != "" {
-			c.Targets()["target"] = NewStringRef(tag)
+			c.Targets()[tag] = NewStringRef(tag)
 		}
 	}
-	fmt.Println(c.Targets())
+	fmt.Println("Targets:", c.Targets())
+	fmt.Println("Sources:", c.Sources())
 	controllerRegistry[name] = c
 	return nil
 }

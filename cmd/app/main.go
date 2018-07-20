@@ -6,7 +6,8 @@ import (
 
 type HelloController struct {
 	structure.BasicController
-	Name string `source:"input#first-name"`
+	Name string `source:"#name"`
+	Output string `target:"#span"`
 }
 
 // type OtherThingController struct {

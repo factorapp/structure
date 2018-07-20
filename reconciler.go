@@ -47,5 +47,28 @@ func (b BasicReconciler) Register(element dom.Element, controller Controller) {
 			fieldName = "ERROR: bad field"
 		}
 		fmt.Println("fieldName:", fieldName)
+		// now we know the controller,
+		// we have the element,
+		// and we know the name of the field in the controller we're mapping to
+		
+	}
+
+	els = element.QuerySelectorAll("[data-source]")
+	for i, el := range els {
+		fmt.Println(i, el, el.TagName())
+		source:= el.GetAttribute("data-source")
+		fmt.Println("Source:", source)
+		var fieldName string
+		fieldNames := strings.Split(source, ".")
+		if len(fieldNames) > 1 {
+			fieldName = fieldNames[1]
+		} else {
+			fieldName = "ERROR: bad field"
+		}
+		fmt.Println("fieldName:", fieldName)
+		// now we know the controller,
+		// we have the element,
+		// and we know the name of the field in the controller we're mapping to
+		
 	}
 }
