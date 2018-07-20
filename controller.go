@@ -2,9 +2,10 @@
 package structure
 
 import (
-	"fmt"
 	"reflect"
 	"syscall/js"
+
+	"github.com/apex/log"
 
 	dom "github.com/gowasm/go-js-dom"
 )
@@ -52,18 +53,18 @@ func RegisterController(name string, c Controller) error {
 		tag := field.Tag.Get("source")
 
 		if tag != "" {
-			fmt.Println("Source TAG:", tag)
+			log.Debugf("Source TAG:", tag)
 			c.Sources()[NewStringRef(tag)] = tag
 		}
 
 		ttag := field.Tag.Get("target")
 		if ttag != "" {
-		fmt.Println("Target TAG:", ttag)
+			log.Debugf("Target TAG:", ttag)
 			c.Targets()[ttag] = NewStringRef(ttag)
 		}
 	}
-	fmt.Println("Targets:", c.Targets())
-	fmt.Println("Sources:", c.Sources())
+	log.Debugf("Targets:", c.Targets())
+	log.Debugf("Sources:", c.Sources())
 	controllerRegistry[name] = c
 	return nil
 }
@@ -79,8 +80,7 @@ func createComponents() {
 	for name, controller := range controllerRegistry {
 		elements := dom.GetWindow().Document().QuerySelectorAll("[data-controller='" + name + "']")
 		for _, el := range elements {
-			fmt.Println(el)
-			fmt.Println("node", el.NodeName())
+			log.Debugf("node", el.NodeName())
 			reconciler.Register(el, controller)
 		}
 	}
