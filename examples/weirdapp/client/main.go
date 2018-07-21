@@ -1,11 +1,12 @@
+// +build js,wasm
 package main
 
 import (
 	"github.com/factorapp/structure/core"
-	"github.com/factorapp/structure/examples/weirdapp/components"
+	tdl "github.com/factorapp/structure/examples/weirdapp/components/todolist"
 )
 
 func main() {
-	core.RegisterController("todolist", &components.TodoList{})
+	core.RegisterController("todolist", &tdl.TodoList{})
 	core.Run()
 }

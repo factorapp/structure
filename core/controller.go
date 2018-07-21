@@ -1,12 +1,14 @@
-// build +js,wasm
+// +build js,wasm
 package core
 
 import (
 	"fmt"
-	dom "github.com/gowasm/go-js-dom"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"syscall/js"
+
+	dom "github.com/gowasm/go-js-dom"
 )
 
 var controllerRegistry = map[string]Controller{}
@@ -17,10 +19,22 @@ type Element struct {
 
 type Controller interface {
 	Targets() map[string][]dom.Element
+	TemplateName() string
 }
 
 type BasicController struct {
+	name    string
 	targets map[string][]dom.Element
+}
+
+func (c *BasicController) TemplateName() string {
+	if c.name != "" {
+		return filepath.Join("components", c.name, "template.html")
+	}
+	name := reflect.ValueOf(c).Elem().Type().Name()
+	c.name = name
+
+	return filepath.Join("components", name, "template.html")
 }
 
 // Targets is a map of struct fields to references to data targets

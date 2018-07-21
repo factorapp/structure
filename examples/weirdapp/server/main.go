@@ -18,7 +18,6 @@ func main() {
 		}
 		app := filepath.Join(cwd, "app")
 	*/
-
 	http.HandleFunc("/wasm_exec.js", jsHandler)
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
