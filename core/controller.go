@@ -109,9 +109,12 @@ func mapActions(element dom.Element, controller Controller) {
 		    })
 		    js.Global.Get("document").Call("getElementById", "myText").Call("addEventListener", "input", cb)
 		*/
-		cb := js.NewCallback(func(args []js.Value) {
-			fmt.Println("EVENT!")
-			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(nil)
+		cb := js.NewEventCallback(js.PreventDefault, func(event js.Value) {
+			fmt.Println("EVENT!", event)
+			jsEvent := dom.WrapEvent(event)
+			inputs := make([]reflect.Value, 1)
+			inputs[0] = reflect.ValueOf(jsEvent)
+			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(inputs)
 		})
 		el.Underlying().Call("addEventListener", eventName, cb)
 	}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/factorapp/structure/core"
+	dom "github.com/gowasm/go-js-dom"
 )
 
 type SlideshowController struct {
@@ -27,7 +28,10 @@ func (s *SlideshowController) showSlide() {
 	}
 
 }
-func (s *SlideshowController) Next() {
+func (s *SlideshowController) Next(event dom.Event) {
+	el := event.Target()
+	fmt.Println("Target:", el)
+	fmt.Println("Tag:", el.TagName())
 	tlen := len(s.Targets()["slide"])
 	if s.Index >= tlen {
 		s.Index = 0
@@ -37,7 +41,7 @@ func (s *SlideshowController) Next() {
 	s.showSlide()
 }
 
-func (s *SlideshowController) Previous() {
+func (s *SlideshowController) Previous(event dom.Event) {
 
 	s.Index--
 
