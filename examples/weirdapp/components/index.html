@@ -13,8 +13,10 @@
 
 <body>
 	<div data-controller="todolist">
+		<input data-target="todolist.name" value="Name..."/>
+		<input data-target="todolist.description" value="Description"/>
+		<button data-action="todolist#add">Add Todo</button>
 		<div data-target="todolist.todos"></div>
-		<button data-action="todolist.add">Add Todo</button>
 	</div>
 
 	<template id="todo">

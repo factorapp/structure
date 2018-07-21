@@ -8,7 +8,7 @@ import (
 
 func wasmHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/wasm")
-	http.ServeFile(w, r, "./app/app.wasm")
+	http.ServeFile(w, r, "./server/app.wasm")
 }
 func main() {
 	http.HandleFunc("/app/app.wasm", wasmHandler)
@@ -26,9 +26,9 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 func jsHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./app/wasm_exec.js")
+	http.ServeFile(w, r, "./server/wasm_exec.js")
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "../components/index.html")
+	http.ServeFile(w, r, "./components/index.html")
 }
