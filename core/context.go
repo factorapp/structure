@@ -44,6 +44,9 @@ func (c *context) ParseTemplate(tplID string) (Tpl, error) {
 
 }
 
+// TODO: maybe return a wrapped HTMLInputElement?
+// Or somehow return a thing that can get values whatever form element it is, so the caller
+// doesn't have to know what kind of element the thing is
 func (c *context) FormInput(name string) (*dom.HTMLInputElement, error) {
 	targets, ok := c.ctrl.Targets()[name]
 	if !ok {

@@ -113,8 +113,8 @@ func mapActions(element dom.Element, controller Controller) {
 		cb := js.NewEventCallback(js.PreventDefault, func(event js.Value) {
 			fmt.Println("EVENT!", event)
 			jsEvent := dom.WrapEvent(event)
-			inputs := make([]reflect.Value, 1)
-			inputs[0] = reflect.ValueOf(jsEvent)
+			ctx := newContext(jsEvent, controller)
+			inputs := []reflect.Value{reflect.ValueOf(ctx)}
 			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(inputs)
 		})
 		el.Underlying().Call("addEventListener", eventName, cb)
