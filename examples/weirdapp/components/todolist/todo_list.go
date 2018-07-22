@@ -18,6 +18,10 @@ type TodoList struct {
 	Todos []Todo
 }
 
+// func (t *TodoList) Render() {
+// 	, err := t.Targets()["todolist"].TextContent()
+// }
+
 func (t *TodoList) Add(ctx core.Context) error {
 	name, err := ctx.FormInput("name")
 	if err != nil {
@@ -49,8 +53,27 @@ func (t *TodoList) Add(ctx core.Context) error {
 
 	fmt.Println("template rendered:", str)
 
-	// oldTextContent := t.Targets()["todolist"]
+	todoListElts, ok := t.Targets()["todos"]
+	if !ok {
+		fmt.Println("no todolist element slice")
+		return fmt.Errorf("no todolist element slice")
+	}
+	if len(todoListElts) == 0 {
+		fmt.Println("no todo list elts")
+		return fmt.Errorf("no todo list elts")
+	}
+	todoListElt := todoListElts[0]
+	if err := todoListElt.AppendTextContent(str); err != nil {
+		fmt.Println("couldn't append:", err)
+		return err
+	}
 	// newTextContent := oldTextContent + str
+
+	// todoListVal, ok := t.Targets()["todolist"]
+	// if !ok {
+	// 	fmt.Println("no todolist target")
+	// 	return fmt.Errorf("no todolist target")
+	// }
 	// t.Targets()["todolist"].SetTextContent(newTextContent)
 	// t.Targets()["todolist"].AppendTextContent(str)
 	// ctx.Element("div#todos").Append(str)
