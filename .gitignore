@@ -4,3 +4,4 @@ app.wasm
 ./examples/weirdapp/server-app
 .vs
 wasm-server
+server-app
