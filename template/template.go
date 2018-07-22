@@ -1,40 +1,37 @@
 package template
 
 import (
-	"path/filepath"
+	"bytes"
+	"fmt"
+	"html/template"
 
-	"github.com/gobuffalo/packr"
-	"github.com/gobuffalo/plush"
+	dom "github.com/gowasm/go-js-dom"
 )
 
 type Renderer struct {
-	componentName string
-	box           packr.Box
+	elt dom.Element
 }
 
-func NewRenderer(componentsBox packr.Box, componentName string) Renderer {
+func NewRenderer(elt dom.Element) Renderer {
 	return Renderer{
-		componentName: componentName,
-		box:           componentsBox,
+		elt: elt,
 	}
 }
 
 func (p Renderer) Render(tplName string, data map[string]interface{}) (string, error) {
-	tplStr, err := p.box.MustString(filepath.Join("components", p.componentName, "_"+tplName))
+	tplElt := p.elt.QuerySelector("#" + tplName)
+	if tplElt == nil {
+		return "", fmt.Errorf("no template %s found", tplName)
+	}
+	tplStr := tplElt.InnerHTML()
+	tpl, err := template.New(tplName).Parse(tplStr)
 	if err != nil {
 		return "", err
 	}
-	plushCtx := plush.NewContextWith(data)
-	return plush.Render(tplStr, plushCtx)
-}
-
-func NewComponentsBox(componentsBaseDir string) (*packr.Box, error) {
-	// use absolute path so that packr doesn't look in the GOPATH.
-	// see https://github.com/gobuffalo/packr/blob/ee34b116572778801ca4a9f6355eda4577cabce8/box.go#L26
-	abs, err := filepath.Abs(componentsBaseDir)
-	if err != nil {
-		return nil, err
+	buf := new(bytes.Buffer)
+	if err := tpl.Execute(buf, data); err != nil {
+		return "", err
 	}
-	box := packr.NewBox(abs)
-	return &box, nil
+
+	return string(buf.Bytes()), nil
 }

@@ -34,8 +34,13 @@ func (t *TodoList) Add(ctx core.Context) error {
 	pretty.Println("name", nameElt.Object)
 	pretty.Println("description", descriptionElt.Object)
 
-	str, err :=ctx.Templates().Render("todo.html", map[string]interface{}{
-		"todo": Todo{Name: nameElt.Value, Description: descriptionElt.Value}
+	str, err := ctx.Templates().Render("todo.html", map[string]interface{}{
+		"todo": Todo{
+			Name:        "Talk about Go?",
+			Description: "Go 4eva!",
+			// Name: nameElt.Value,
+			// Description: descriptionElt.Value,
+		},
 	})
 	if err != nil {
 		return err

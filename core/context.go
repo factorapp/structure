@@ -4,13 +4,11 @@ import (
 	"fmt"
 
 	"github.com/factorapp/structure/template"
-	"github.com/gobuffalo/packr"
 	dom "github.com/gowasm/go-js-dom"
 )
 
 // Context gets passed into event handlers. It's super helpful for rad things!
 type Context interface {
-	dom.Event
 	Form
 	Templates() template.Renderer
 	Element(string) ElementWrapper
@@ -25,16 +23,18 @@ type ElementWrapper interface {
 }
 
 type context struct {
-	dom.Event
+	evt      dom.Event
+	elt      dom.Element
 	ctrl     Controller
 	renderer template.Renderer
 }
 
-func newContext(evt dom.Event, c Controller, componentsBox packr.Box) Context {
+func newContext(elt dom.Element, evt dom.Event, c Controller) Context {
 	return &context{
-		Event:    evt,
+		elt:      elt,
+		evt:      evt,
 		ctrl:     c,
-		renderer: template.NewRenderer(componentsBox, controllerName(c)),
+		renderer: template.NewRenderer(elt),
 	}
 }
 
@@ -65,11 +65,12 @@ func (c *context) Element(id string) ElementWrapper {
 	return eltWrapper{elt: dom.GetWindow().Document().GetElementByID(id)}
 }
 
-type eltWrapper{
+type eltWrapper struct {
 	elt dom.Element
 }
 
 func (e eltWrapper) Append(raw string) {
 	existingHTML := e.elt.InnerHTML()
+	fmt.Println("setting new HTML", existingHTML+raw)
 	e.elt.SetInnerHTML(existingHTML + raw)
 }

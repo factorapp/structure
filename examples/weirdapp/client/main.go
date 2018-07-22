@@ -8,5 +8,5 @@ import (
 
 func main() {
 	core.RegisterController("todolist", &tdl.TodoList{})
-	core.Run("../components")
+	core.Run()
 }
