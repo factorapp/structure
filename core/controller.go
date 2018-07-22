@@ -18,7 +18,6 @@ type Element struct {
 }
 
 type Controller interface {
-	GetFormData(string) (interface{}, error)
 	// Template
 	Targets() map[string][]dom.Element
 	TemplateName() string
@@ -27,19 +26,6 @@ type Controller interface {
 type BasicController struct {
 	name    string
 	targets map[string][]dom.Element
-}
-
-func (c *BasicController) GetFormData(targetName string) (interface{}, error) {
-	targetSlice, ok := c.Targets()[targetName]
-	if !ok {
-		return nil, fmt.Errorf("no target %s found", targetName)
-	}
-	if len(targetSlice) == 0 {
-		return nil, fmt.Errorf("no elements at target %s found", targetName)
-	}
-	target := targetSlice[0]
-	fmt.Println("target", target.ID(), ":", target.TextContent())
-	return target.TextContent(), nil
 }
 
 func (c *BasicController) TemplateName() string {
