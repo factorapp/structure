@@ -8,28 +8,21 @@ import (
 	"strings"
 	"syscall/js"
 
+	domint "github.com/factorapp/structure/dom"
 	dom "github.com/gowasm/go-js-dom"
 )
 
 var controllerRegistry = map[string]Controller{}
 
-type Element struct {
-	js.Value
-}
-
-func newElement(val js.Value) *Element {
-	return &Element{Value: val}
-}
-
 type Controller interface {
 	// Template
-	Targets() map[string][]*Element
+	Targets() map[string][]*domint.Element
 	TemplateName() string
 }
 
 type BasicController struct {
 	name    string
-	targets map[string][]*Element
+	targets map[string][]*domint.Element
 }
 
 func (c *BasicController) TemplateName() string {
@@ -43,9 +36,9 @@ func (c *BasicController) TemplateName() string {
 }
 
 // Targets is a map of struct fields to references to data targets
-func (c *BasicController) Targets() map[string][]*Element {
+func (c *BasicController) Targets() map[string][]*domint.Element {
 	if c.targets == nil {
-		c.targets = make(map[string][]*Element)
+		c.targets = make(map[string][]*domint.Element)
 	}
 	return c.targets
 }
@@ -79,7 +72,7 @@ func mapTargets(element dom.Element, controller Controller) {
 			fmt.Println("Bad Target:", target)
 			continue
 		}
-		elmnt := newElement(el.Underlying())
+		elmnt := domint.NewElement(el.Underlying())
 
 		controller.Targets()[targetName] = append(controller.Targets()[targetName], elmnt)
 	}
@@ -114,7 +107,7 @@ func mapActions(element dom.Element, controller Controller) {
 		            move := js.Global.Get("document").Call("getElementById", "myText").Get("value").Int()
 		            fmt.Println(move)
 		    })
-		    js.Global.Get("document").Call("getElementById", "myText").Call("addEventListener", "input", cb)
+		    js.Global.Get("document").Call("getlementById", "myText").Call("addEventListener", "input", cb)
 		*/
 		cb := js.NewEventCallback(js.PreventDefault, func(event js.Value) {
 			fmt.Println("EVENT!", event)
@@ -122,7 +115,7 @@ func mapActions(element dom.Element, controller Controller) {
 
 			// we're passing element in here, so that means that all templates need to be
 			// under it. Maybe we should relax that...
-			ctx := newContext(newElement(element.Underlying()), jsEvent, controller)
+			ctx := newContext(domint.NewElement(element.Underlying()), jsEvent, controller)
 			inputs := []reflect.Value{reflect.ValueOf(ctx)}
 			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(inputs)
 		})

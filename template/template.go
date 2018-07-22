@@ -4,27 +4,33 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"syscall/js"
 
-	dom "github.com/gowasm/go-js-dom"
+	"github.com/factorapp/structure/dom"
 )
 
 type Renderer struct {
-	elt dom.Element
+	elt *dom.Element
 }
 
-func NewRenderer(elt dom.Element) Renderer {
+func NewRenderer(elt *dom.Element) Renderer {
 	return Renderer{
 		elt: elt,
 	}
 }
 
 func (p Renderer) Render(tplName string, data map[string]interface{}) (string, error) {
-	tplElt := p.elt.QuerySelector("#" + tplName)
-	if tplElt == nil {
+	tplElt := p.elt.Call("querySelector", "#"+tplName)
+	//tplElt := p.elt.QuerySelector("#" + tplName)
+	if tplElt == js.Null() {
 		return "", fmt.Errorf("no template %s found", tplName)
 	}
-	tplStr := tplElt.InnerHTML()
-	tpl, err := template.New(tplName).Parse(tplStr)
+	tplStrVal := tplElt.Get("innerHTML") //InnerHTML()
+	if tplStrVal == js.Null() {
+		return "", fmt.Errorf("no inner HTML in %s", tplName)
+	}
+	tplStr := tplStrVal.String()
+	tpl, err := template.New(tplStr).Parse(tplStr)
 	if err != nil {
 		return "", err
 	}

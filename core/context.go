@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 
+	domint "github.com/factorapp/structure/dom"
 	"github.com/factorapp/structure/template"
 	dom "github.com/gowasm/go-js-dom"
 )
@@ -24,17 +25,17 @@ type ElementWrapper interface {
 
 type context struct {
 	evt      dom.Event
-	elt      *Element
+	elt      *domint.Element
 	ctrl     Controller
 	renderer template.Renderer
 }
 
-func newContext(elt *Element, evt dom.Event, c Controller) Context {
+func newContext(elt *domint.Element, evt dom.Event, c Controller) Context {
 	return &context{
-		elt:  elt,
-		evt:  evt,
-		ctrl: c,
-		// renderer: template.NewRenderer(elt),
+		elt:      elt,
+		evt:      evt,
+		ctrl:     c,
+		renderer: template.NewRenderer(elt),
 	}
 }
 

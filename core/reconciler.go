@@ -3,6 +3,7 @@ package core
 import (
 	dom "github.com/gowasm/go-js-dom"
 	// "github.com/dennwc/dom/js"
+	domint "github.com/factorapp/structure/dom"
 )
 
 type Reconciler interface {
@@ -13,7 +14,7 @@ type Reconciler interface {
 // refEltTuple is an (element, ref) pair that's used either as a source or target
 // when reconciliation happens
 type refEltTuple struct {
-	el  Element
+	el  domint.Element
 	ref Ref
 }
 

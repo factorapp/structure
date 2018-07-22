@@ -1,6 +1,8 @@
 package todolist
 
 import (
+	"fmt"
+
 	"github.com/factorapp/structure/core"
 	"github.com/kr/pretty"
 )
@@ -34,20 +36,21 @@ func (t *TodoList) Add(ctx core.Context) error {
 	pretty.Println("name", name)
 	pretty.Println("description", descr)
 
-	// str, err := ctx.Templates().Render("todo.html", map[string]interface{}{
-	// 	"todo": Todo{
-	// 		Name:        "Talk about Go?",
-	// 		Description: "Go 4eva!",
-	// 		// Name: nameElt.Value,
-	// 		// Description: descriptionElt.Value,
-	// 	},
-	// })
-	// if err != nil {
-	// 	return err
-	// }
+	str, err := ctx.Templates().Render("new-todo", map[string]interface{}{
+		"todo": Todo{
+			Name:        name,
+			Description: descr,
+		},
+	})
+	if err != nil {
+		fmt.Println("error rendering template:", err)
+		return err
+	}
+
+	fmt.Println("template rendered:", str)
 
 	// oldTextContent := t.Targets()["todolist"]
-	// newTextContent := oldTextContent+= str
+	// newTextContent := oldTextContent + str
 	// t.Targets()["todolist"].SetTextContent(newTextContent)
 	// t.Targets()["todolist"].AppendTextContent(str)
 	// ctx.Element("div#todos").Append(str)
