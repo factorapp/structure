@@ -5,6 +5,7 @@ require (
 	github.com/gobuffalo/packr v1.11.1
 	github.com/gobuffalo/plush v1.0.0
 	github.com/gorilla/mux v1.6.2
+	github.com/gowasm/dom v0.0.0-20180720055721-ffe2c35142ee221c454ed79fcbf3785c505082c5
 	github.com/gowasm/go-js-dom v0.0.1
 	github.com/kr/pretty v0.1.0
 	github.com/zmb3/gogetdoc v0.0.0-20180522031303-10095872a7c5 // indirect
