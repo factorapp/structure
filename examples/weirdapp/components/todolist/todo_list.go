@@ -17,11 +17,11 @@ type TodoList struct {
 }
 
 func (t *TodoList) Add(ctx core.Context) error {
-	nameElt, err := ctx.FormInput("name")
+	name, err := ctx.FormInput("name")
 	if err != nil {
 		return err
 	}
-	descriptionElt, err := ctx.FormInput("description")
+	descr, err := ctx.FormInput("description")
 	if err != nil {
 		return err
 	}
@@ -31,21 +31,26 @@ func (t *TodoList) Add(ctx core.Context) error {
 	// these objects have no value in them.
 	// don't remember - are the targets kept up to date, or do we need to look them up directly
 	// in the DOM?
-	pretty.Println("name", nameElt.Object)
-	pretty.Println("description", descriptionElt.Object)
+	pretty.Println("name", name)
+	pretty.Println("description", descr)
 
-	str, err := ctx.Templates().Render("todo.html", map[string]interface{}{
-		"todo": Todo{
-			Name:        "Talk about Go?",
-			Description: "Go 4eva!",
-			// Name: nameElt.Value,
-			// Description: descriptionElt.Value,
-		},
-	})
-	if err != nil {
-		return err
-	}
-	ctx.Element("div#todos").Append(str)
+	// str, err := ctx.Templates().Render("todo.html", map[string]interface{}{
+	// 	"todo": Todo{
+	// 		Name:        "Talk about Go?",
+	// 		Description: "Go 4eva!",
+	// 		// Name: nameElt.Value,
+	// 		// Description: descriptionElt.Value,
+	// 	},
+	// })
+	// if err != nil {
+	// 	return err
+	// }
+
+	// oldTextContent := t.Targets()["todolist"]
+	// newTextContent := oldTextContent+= str
+	// t.Targets()["todolist"].SetTextContent(newTextContent)
+	// t.Targets()["todolist"].AppendTextContent(str)
+	// ctx.Element("div#todos").Append(str)
 
 	return nil
 	// TODO: how do you pass in form data?

@@ -17,15 +17,19 @@ type Element struct {
 	js.Value
 }
 
+func newElement(val js.Value) *Element {
+	return &Element{Value: val}
+}
+
 type Controller interface {
 	// Template
-	Targets() map[string][]dom.Element
+	Targets() map[string][]*Element
 	TemplateName() string
 }
 
 type BasicController struct {
 	name    string
-	targets map[string][]dom.Element
+	targets map[string][]*Element
 }
 
 func (c *BasicController) TemplateName() string {
@@ -39,9 +43,9 @@ func (c *BasicController) TemplateName() string {
 }
 
 // Targets is a map of struct fields to references to data targets
-func (c *BasicController) Targets() map[string][]dom.Element {
+func (c *BasicController) Targets() map[string][]*Element {
 	if c.targets == nil {
-		c.targets = make(map[string][]dom.Element)
+		c.targets = make(map[string][]*Element)
 	}
 	return c.targets
 }
@@ -75,7 +79,9 @@ func mapTargets(element dom.Element, controller Controller) {
 			fmt.Println("Bad Target:", target)
 			continue
 		}
-		controller.Targets()[targetName] = append(controller.Targets()[targetName], el)
+		elmnt := newElement(el.Underlying())
+
+		controller.Targets()[targetName] = append(controller.Targets()[targetName], elmnt)
 	}
 
 }
@@ -116,7 +122,7 @@ func mapActions(element dom.Element, controller Controller) {
 
 			// we're passing element in here, so that means that all templates need to be
 			// under it. Maybe we should relax that...
-			ctx := newContext(element, jsEvent, controller)
+			ctx := newContext(newElement(element.Underlying()), jsEvent, controller)
 			inputs := []reflect.Value{reflect.ValueOf(ctx)}
 			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(inputs)
 		})
