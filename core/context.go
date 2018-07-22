@@ -24,13 +24,13 @@ type ElementWrapper interface {
 }
 
 type context struct {
-	evt      dom.Event
+	evt      domint.Event
 	elt      *domint.Element
 	ctrl     Controller
 	renderer template.Renderer
 }
 
-func newContext(elt *domint.Element, evt dom.Event, c Controller) Context {
+func newContext(elt *domint.Element, evt domint.Event, c Controller) Context {
 	return &context{
 		elt:      elt,
 		evt:      evt,

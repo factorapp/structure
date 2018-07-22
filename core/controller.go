@@ -111,7 +111,7 @@ func mapActions(element dom.Element, controller Controller) {
 		*/
 		cb := js.NewEventCallback(js.PreventDefault, func(event js.Value) {
 			fmt.Println("EVENT!", event)
-			jsEvent := dom.WrapEvent(event)
+			jsEvent := domint.WrapEvent(event)
 
 			// we're passing element in here, so that means that all templates need to be
 			// under it. Maybe we should relax that...
