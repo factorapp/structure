@@ -25,11 +25,11 @@ func (t *TodoList) Add(ctx core.Context) error {
 	if err != nil {
 		return err
 	}
-	name := nameElt.Value()
-	description := descriptionElt.Value()
+	// name := nameElt.Value()
+	// description := descriptionElt.Value()
 
-	pretty.Println("name", name)
-	pretty.Println("description", description)
+	pretty.Println("name", nameElt.Object)
+	pretty.Println("description", descriptionElt.Object)
 
 	// tpl, err := ctx.ParseTemplate("todo")
 	// if err != nil {
