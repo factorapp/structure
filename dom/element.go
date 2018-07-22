@@ -12,19 +12,19 @@ type Element struct {
 func NewElement(val js.Value) *Element {
 	return &Element{Value: val}
 }
-func (e *Element) TextContent() (string, error) {
-	htmlVal := e.Get("textContent")
+func (e *Element) HTML() (string, error) {
+	htmlVal := e.Get("innerHTML")
 	if htmlVal == js.Null() {
-		return "", fmt.Errorf("no textContent")
+		return "", fmt.Errorf("no html")
 	}
 	return htmlVal.String(), nil
 }
-func (e *Element) AppendTextContent(toAppend string) error {
-	oldTextContent, err := e.TextContent()
+func (e *Element) AppendHTML(toAppend string) error {
+	oldHTML, err := e.HTML()
 	if err != nil {
 		return err
 	}
-	newTextContent := oldTextContent + toAppend
-	e.Set("textContent", newTextContent)
+	newHTML := oldHTML + toAppend
+	e.Set("innerHTML", newHTML)
 	return nil
 }

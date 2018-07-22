@@ -63,7 +63,7 @@ func (t *TodoList) Add(ctx core.Context) error {
 		return fmt.Errorf("no todo list elts")
 	}
 	todoListElt := todoListElts[0]
-	if err := todoListElt.AppendTextContent(str); err != nil {
+	if err := todoListElt.AppendHTML(str); err != nil {
 		fmt.Println("couldn't append:", err)
 		return err
 	}
