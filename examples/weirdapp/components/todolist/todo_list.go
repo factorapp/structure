@@ -28,6 +28,9 @@ func (t *TodoList) Add(ctx core.Context) error {
 	// name := nameElt.Value()
 	// description := descriptionElt.Value()
 
+	// these objects have no value in them.
+	// don't remember - are the targets kept up to date, or do we need to look them up directly
+	// in the DOM?
 	pretty.Println("name", nameElt.Object)
 	pretty.Println("description", descriptionElt.Object)
 
