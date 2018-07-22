@@ -1,6 +1,7 @@
 module github.com/factorapp/structure
 
 require (
+	github.com/dennwc/dom v0.0.0-20180718160721-ffe2c35142ee
 	github.com/gobuffalo/buffalo v0.12.4
 	github.com/gobuffalo/packr v1.11.1
 	github.com/gobuffalo/plush v1.0.0
