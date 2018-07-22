@@ -1,3 +1,4 @@
 app.wasm 
 .envrc
 .DS_Store
+./examples/weirdapp/server-app
