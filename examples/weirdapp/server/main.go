@@ -22,6 +22,7 @@ func main() {
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 	http.HandleFunc("/", indexHandler)
+	log.Println("serving on 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 func jsHandler(w http.ResponseWriter, r *http.Request) {
