@@ -3,6 +3,8 @@ package core
 import (
 	"fmt"
 
+	"github.com/factorapp/structure/template"
+	"github.com/gobuffalo/packr"
 	dom "github.com/gowasm/go-js-dom"
 )
 
@@ -10,38 +12,34 @@ import (
 type Context interface {
 	dom.Event
 	Form
-	Template
-}
-
-type Template interface {
-	ParseTemplate(string) (Tpl, error)
+	Templates() template.Renderer
+	Element(string) ElementWrapper
 }
 
 type Form interface {
 	FormInput(string) (*dom.HTMLInputElement, error)
 }
 
-type Tpl interface {
-	Render(string, interface{})
+type ElementWrapper interface {
+	Append(rawHTML string)
 }
 
 type context struct {
 	dom.Event
-	ctrl Controller
+	ctrl     Controller
+	renderer template.Renderer
 }
 
-func newContext(evt dom.Event, c Controller) Context {
-	return &context{Event: evt, ctrl: c}
+func newContext(evt dom.Event, c Controller, componentsBox packr.Box) Context {
+	return &context{
+		Event:    evt,
+		ctrl:     c,
+		renderer: template.NewRenderer(componentsBox, controllerName(c)),
+	}
 }
 
-func (c *context) ParseTemplate(tplID string) (Tpl, error) {
-	// elts := dom.GetWindow().Document().QuerySelector(fmt.Sprintf("template#%s", tplID))
-	// if len(elts) == 0 {
-	// 	return nil, fmt.Errorf("no template with ID %s", tplID)
-	// }
-	// return elts[0]
-	return nil, nil
-
+func (c *context) Templates() template.Renderer {
+	return c.renderer
 }
 
 // TODO: maybe return a wrapped HTMLInputElement?
@@ -61,4 +59,17 @@ func (c *context) FormInput(name string) (*dom.HTMLInputElement, error) {
 		return nil, fmt.Errorf("input not found at %s", name)
 	}
 	return input, nil
+}
+
+func (c *context) Element(id string) ElementWrapper {
+	return eltWrapper{elt: dom.GetWindow().Document().GetElementByID(id)}
+}
+
+type eltWrapper{
+	elt dom.Element
+}
+
+func (e eltWrapper) Append(raw string) {
+	existingHTML := e.elt.InnerHTML()
+	e.elt.SetInnerHTML(existingHTML + raw)
 }

@@ -34,16 +34,14 @@ func (t *TodoList) Add(ctx core.Context) error {
 	pretty.Println("name", nameElt.Object)
 	pretty.Println("description", descriptionElt.Object)
 
-	// tpl, err := ctx.ParseTemplate("todo")
-	// if err != nil {
-	// 	return err
-	// }
-	// if err := tpl.Render("div#todos", map[string]interface{}{
-	// 	"name": name,
-	// 	"description": description
-	// }); err != nil {
-	// 	return err
-	// }
+	str, err :=ctx.Templates().Render("todo.html", map[string]interface{}{
+		"todo": Todo{Name: nameElt.Value, Description: descriptionElt.Value}
+	})
+	if err != nil {
+		return err
+	}
+	ctx.Element("div#todos").Append(str)
+
 	return nil
 	// TODO: how do you pass in form data?
 	// name := t.Targets()["name"][0]

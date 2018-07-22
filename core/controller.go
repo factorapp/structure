@@ -8,6 +8,7 @@ import (
 	"strings"
 	"syscall/js"
 
+	"github.com/gobuffalo/packr"
 	dom "github.com/gowasm/go-js-dom"
 )
 
@@ -51,10 +52,10 @@ func RegisterController(name string, c Controller) error {
 	return nil
 }
 
-func Run() error {
+func Run(componentsDir string) error {
 	reconciler := &BasicReconciler{}
 	ch := make(chan struct{})
-	createComponents(reconciler)
+	createComponents(reconciler, packr.NewBox(componentsDir))
 	<-ch
 	return nil
 }
@@ -80,7 +81,7 @@ func mapTargets(element dom.Element, controller Controller) {
 
 }
 
-func mapActions(element dom.Element, controller Controller) {
+func mapActions(element dom.Element, controller Controller, componentsBox packr.Box) {
 	els := element.QuerySelectorAll("[data-action]")
 	for _, el := range els {
 		action := el.GetAttribute("data-action")
@@ -113,7 +114,7 @@ func mapActions(element dom.Element, controller Controller) {
 		cb := js.NewEventCallback(js.PreventDefault, func(event js.Value) {
 			fmt.Println("EVENT!", event)
 			jsEvent := dom.WrapEvent(event)
-			ctx := newContext(jsEvent, controller)
+			ctx := newContext(jsEvent, controller, componentsBox)
 			inputs := []reflect.Value{reflect.ValueOf(ctx)}
 			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(inputs)
 		})
@@ -121,13 +122,13 @@ func mapActions(element dom.Element, controller Controller) {
 	}
 	// Iterate over all available fields and read the tag value
 }
-func createComponents(reconciler Reconciler) {
+func createComponents(reconciler Reconciler, componentsBox packr.Box) {
 	for name, controller := range controllerRegistry {
 		elements := dom.GetWindow().Document().QuerySelectorAll("[data-controller='" + name + "']")
 		for _, el := range elements {
 			reconciler.Register(el, controller)
 			mapTargets(el, controller)
-			mapActions(el, controller)
+			mapActions(el, controller, componentsBox)
 		}
 	}
 
