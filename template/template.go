@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"syscall/js"
 
-	"github.com/factorapp/structure/dom"
+	dom "github.com/gowasm/livedom"
 )
 
 type Renderer struct {

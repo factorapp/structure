@@ -63,6 +63,8 @@ github.com/gowasm/dom v0.0.0-20180720055721-ffe2c35142ee221c454ed79fcbf3785c5050
 github.com/gowasm/dom v0.0.0-20180720055721-ffe2c35142ee221c454ed79fcbf3785c505082c5/go.mod h1:JswVRf02wDE06H/0qfGbHGmID80dAK/KLcxwntoGa2U=
 github.com/gowasm/go-js-dom v0.0.1 h1:FCbfUmS3wPOepLmQ2pQzicHUEoW9KIYiM+osR/NE1n8=
 github.com/gowasm/go-js-dom v0.0.1/go.mod h1:K37PTzggLHdwZwVKIlgreQbR7b1pwrudrZEFYcPifKE=
+github.com/gowasm/livedom v0.0.0-20180722210841-a95e435418e7 h1:OyUBJE3Lstdt4CIUCrulgpM67gmNMmH67+UQSro+ThM=
+github.com/gowasm/livedom v0.0.0-20180722210841-a95e435418e7/go.mod h1:BOB9rDv9K5m5M//b8+OMgXNUAKMzomFOVxxJimzhlHo=
 github.com/inconshreveable/mousetrap v0.0.0-20141017200713-76626ae9c91c/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/jmoiron/sqlx v0.0.0-20180406164412-2aeb6a910c2b/go.mod h1:IiEW3SEiiErVyFdH8NTuWjSifiEQKUoyK3LNqr2kCHU=

@@ -3,7 +3,7 @@ package core
 import (
 	dom "github.com/gowasm/go-js-dom"
 	// "github.com/dennwc/dom/js"
-	domint "github.com/factorapp/structure/dom"
+	domint "github.com/gowasm/livedom"
 )
 
 type Reconciler interface {

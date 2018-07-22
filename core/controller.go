@@ -8,8 +8,8 @@ import (
 	"strings"
 	"syscall/js"
 
-	domint "github.com/factorapp/structure/dom"
 	dom "github.com/gowasm/go-js-dom"
+	domint "github.com/gowasm/livedom"
 )
 
 var controllerRegistry = map[string]Controller{}

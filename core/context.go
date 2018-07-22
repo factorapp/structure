@@ -3,9 +3,9 @@ package core
 import (
 	"fmt"
 
-	domint "github.com/factorapp/structure/dom"
 	"github.com/factorapp/structure/template"
 	dom "github.com/gowasm/go-js-dom"
+	domint "github.com/gowasm/livedom"
 )
 
 // Context gets passed into event handlers. It's super helpful for rad things!
