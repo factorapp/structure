@@ -8,21 +8,22 @@ import (
 	"strings"
 	"syscall/js"
 
-	domint "github.com/factorapp/structure/dom"
-	dom "github.com/gowasm/go-js-dom"
+	dom "github.com/gowasm/livedom"
+	//domint "github.com/factorapp/structure/dom"
+	//dom "github.com/gowasm/go-js-dom"
 )
 
 var controllerRegistry = map[string]Controller{}
 
 type Controller interface {
 	// Template
-	Targets() map[string][]*domint.Element
+	Targets() map[string][]*dom.Element
 	TemplateName() string
 }
 
 type BasicController struct {
 	name    string
-	targets map[string][]*domint.Element
+	targets map[string][]*dom.Element
 }
 
 func (c *BasicController) TemplateName() string {
@@ -36,9 +37,9 @@ func (c *BasicController) TemplateName() string {
 }
 
 // Targets is a map of struct fields to references to data targets
-func (c *BasicController) Targets() map[string][]*domint.Element {
+func (c *BasicController) Targets() map[string][]*dom.Element {
 	if c.targets == nil {
-		c.targets = make(map[string][]*domint.Element)
+		c.targets = make(map[string][]*dom.Element)
 	}
 	return c.targets
 }
@@ -72,7 +73,7 @@ func mapTargets(element dom.Element, controller Controller) {
 			fmt.Println("Bad Target:", target)
 			continue
 		}
-		elmnt := domint.NewElement(el.Underlying())
+		elmnt := dom.NewElement(el.Underlying())
 
 		controller.Targets()[targetName] = append(controller.Targets()[targetName], elmnt)
 	}
@@ -115,7 +116,7 @@ func mapActions(element dom.Element, controller Controller) {
 
 			// we're passing element in here, so that means that all templates need to be
 			// under it. Maybe we should relax that...
-			ctx := newContext(domint.NewElement(element.Underlying()), jsEvent, controller)
+			ctx := newContext(dom.NewElement(element.Underlying()), jsEvent, controller)
 			inputs := []reflect.Value{reflect.ValueOf(ctx)}
 			reflect.ValueOf(controller).MethodByName(strings.Title(actionName)).Call(inputs)
 		})

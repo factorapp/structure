@@ -3,9 +3,9 @@ package core
 import (
 	"fmt"
 
-	domint "github.com/factorapp/structure/dom"
 	"github.com/factorapp/structure/template"
 	dom "github.com/gowasm/go-js-dom"
+	"github.com/gowasm/livedom"
 )
 
 // Context gets passed into event handlers. It's super helpful for rad things!
@@ -24,13 +24,13 @@ type ElementWrapper interface {
 }
 
 type context struct {
-	evt      dom.Event
-	elt      *domint.Element
+	evt      livedom.Event
+	elt      *livedom.Element
 	ctrl     Controller
 	renderer template.Renderer
 }
 
-func newContext(elt *domint.Element, evt dom.Event, c Controller) Context {
+func newContext(elt *livedom.Element, evt livedom.Event, c Controller) Context {
 	return &context{
 		elt:      elt,
 		evt:      evt,
