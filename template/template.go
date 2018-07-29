@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"syscall/js"
 
 	dom "github.com/gowasm/livedom"
 )
@@ -20,16 +19,16 @@ func NewRenderer(elt *dom.Element) Renderer {
 }
 
 func (p Renderer) Render(tplName string, data map[string]interface{}) (string, error) {
-	tplElt := p.elt.Call("querySelector", "#"+tplName)
+	tplElt := p.elt.QuerySelector("#" + tplName)
 	//tplElt := p.elt.QuerySelector("#" + tplName)
-	if tplElt == js.Null() {
+	if !tplElt.Valid() {
 		return "", fmt.Errorf("no template %s found", tplName)
 	}
-	tplStrVal := tplElt.Get("innerHTML") //InnerHTML()
-	if tplStrVal == js.Null() {
+	tplStrVal := tplElt.InnerHTML() //InnerHTML()
+	if tplStrVal == "" {
 		return "", fmt.Errorf("no inner HTML in %s", tplName)
 	}
-	tplStr := tplStrVal.String()
+	tplStr := tplStrVal
 	tpl, err := template.New(tplStr).Parse(tplStr)
 	if err != nil {
 		return "", err

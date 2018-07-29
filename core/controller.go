@@ -72,9 +72,8 @@ func mapTargets(element dom.Element, controller Controller) {
 			fmt.Println("Bad Target:", target)
 			continue
 		}
-		elmnt := domint.NewElement(el.Underlying())
 
-		controller.Targets()[targetName] = append(controller.Targets()[targetName], elmnt)
+		controller.Targets()[targetName] = append(controller.Targets()[targetName], el)
 	}
 
 }

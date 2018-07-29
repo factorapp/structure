@@ -17,6 +17,7 @@ type Context interface {
 
 type Form interface {
 	FormInput(string) (string, error)
+	TargetFormInput(domint.Event) (string, error)
 }
 
 type ElementWrapper interface {
@@ -54,9 +55,20 @@ func (c *context) FormInput(name string) (string, error) {
 	if len(targets) == 0 {
 		return "", fmt.Errorf("no targets named %s", name)
 	}
-	target := targets[0]
-	fmt.Println("form input target:", target.Get("value").String())
-	return target.Get("value").String(), nil
+	target := domint.AsInput(targets[0])
+	fmt.Println("form input target:", target.Value())
+	return target.Value(), nil
+	// input, ok := target.(*dom.HTMLInputElement)
+	// if !ok {
+	// 	return nil, fmt.Errorf("input not found at %s", name)
+	// }
+	// return input, nil
+}
+func (c *context) TargetFormInput(e domint.Event) (string, error) {
+
+	target := domint.AsInput(e.Target())
+	fmt.Println("form input target:", target.Value())
+	return target.Value(), nil
 	// input, ok := target.(*dom.HTMLInputElement)
 	// if !ok {
 	// 	return nil, fmt.Errorf("input not found at %s", name)

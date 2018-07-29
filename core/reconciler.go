@@ -29,16 +29,17 @@ type BasicReconciler struct {
 
 func (b BasicReconciler) Reconcile(c Controller) error {
 	// ref => element
-	for _, source := range b.sources {
-		source.el.Set("innerHTML", source.ref.Value())
-	}
-
-	// element => ref
-	for _, target := range b.targets {
-		if err := target.ref.Set(target.el.Get("innerHTML")); err != nil {
-			return err
+	/*	for _, source := range b.sources {
+			source.el.SetInnerHTML(source.ref.Value())
 		}
-	}
+
+		// element => ref
+		for _, target := range b.targets {
+			if err := target.ref.Set(target.el.Get("innerHTML")); err != nil {
+				return err
+			}
+		}
+	*/
 	return nil
 }
 
